@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Tile, TextInput, Button } from '@carbon/react'
+import { Tile, TextInput } from '@carbon/react'
+import { SendAlt } from '@carbon/icons-react'
 import type { CanvasSection } from '@lean-canvas/shared'
 
 // ADR-0020: NO Redux imports in this file — props-in/callbacks-out only.
@@ -27,7 +28,6 @@ const SECTION_LABELS: Record<CanvasSection, string> = {
 const API_BASE = import.meta.env.VITE_LEAN_CANVAS_API_URL ?? 'http://localhost:3026'
 
 // Blue Ocean starter prompts — shown as initial assistant message in each section.
-// Frames thinking around uncontested market space and value innovation.
 const BLUE_OCEAN_PROMPTS: Record<CanvasSection, string> = {
   PROBLEM:           'What top 1–3 problems do customers face today that existing solutions fail to solve? Consider both direct pain points and "nonconsumers" who avoid the market entirely.',
   SOLUTION:          'What is the simplest possible solution to each problem above? Focus on eliminating or reducing factors that make the current market unattractive.',
@@ -59,11 +59,7 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
       const res = await fetch(`${API_BASE}/api/canvas/${section}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMsg,
-          threadId,
-          conversationHistory: messages,
-        }),
+        body: JSON.stringify({ message: userMsg, threadId, conversationHistory: messages }),
       })
       const data = await res.json() as { content: string }
       setMessages(prev => [...prev, { role: 'assistant', content: data.content }])
@@ -81,38 +77,72 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
         display: 'flex',
         flexDirection: 'column',
         background: 'var(--cds-layer)',
-        padding: '1rem',
+        padding: '0.625rem',
         overflow: 'hidden',
       }}
       onClick={onFocus}
     >
-      <h4 style={{ color: 'var(--cds-text-secondary)', fontSize: '0.75rem', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+      <h4 style={{
+        color: 'var(--cds-text-secondary)',
+        fontSize: '0.6875rem',
+        fontWeight: 600,
+        letterSpacing: '0.05em',
+        textTransform: 'uppercase',
+        marginBottom: '0.375rem',
+        flexShrink: 0,
+      }}>
         {SECTION_LABELS[section]}
       </h4>
 
-      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '0.375rem', fontSize: '0.8125rem', minHeight: 0 }}>
         {messages.map((m, i) => (
-          <p key={i} style={{ color: m.role === 'user' ? 'var(--cds-text-primary)' : 'var(--cds-text-secondary)', margin: '0.25rem 0' }}>
+          <p key={i} style={{
+            color: m.role === 'user' ? 'var(--cds-text-primary)' : 'var(--cds-text-secondary)',
+            margin: '0.2rem 0',
+            lineHeight: 1.4,
+          }}>
             {m.content}
           </p>
         ))}
-        {loading && <p style={{ color: 'var(--cds-text-placeholder)' }}>Thinking…</p>}
+        {loading && <p style={{ color: 'var(--cds-text-placeholder)', fontSize: '0.75rem' }}>Thinking…</p>}
       </div>
 
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
+      {/* Input row — icon-only send button, square, compact */}
+      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', flexShrink: 0 }}>
         <TextInput
           id={`input-${section}`}
           labelText=""
           hideLabel
           size="sm"
-          placeholder={`Ask about ${SECTION_LABELS[section]}…`}
+          placeholder={`Ask…`}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && submit()}
+          onClick={e => e.stopPropagation()}
         />
-        <Button size="sm" onClick={submit} disabled={loading}>
-          Send
-        </Button>
+        <button
+          onClick={e => { e.stopPropagation(); submit() }}
+          disabled={loading || !input.trim()}
+          title="Send"
+          style={{
+            flexShrink: 0,
+            width: '2rem',
+            height: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: loading || !input.trim()
+              ? 'var(--cds-button-disabled)'
+              : 'var(--cds-button-primary)',
+            border: 'none',
+            borderRadius: '2px',
+            cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+            color: 'var(--cds-text-on-color)',
+            transition: 'background 0.15s',
+          }}
+        >
+          <SendAlt size={16} />
+        </button>
       </div>
     </Tile>
   )

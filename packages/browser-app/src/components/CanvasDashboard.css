@@ -74,5 +74,7 @@
 .canvas-grid-scroller {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  /* hidden: grid rows are 1fr each so they scale to fit — no overflow needed.
+   * On very small viewports the 600px minHeight will trigger, but that's fine. */
+  overflow: hidden;
 }
