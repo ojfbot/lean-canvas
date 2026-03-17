@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Tile, TextInput } from '@carbon/react'
+import React, { useState, useRef } from 'react'
+import { Tile, TextInput, IconButton } from '@carbon/react'
 import { SendAlt } from '@carbon/icons-react'
 import type { CanvasSection } from '@lean-canvas/shared'
 
@@ -9,7 +9,7 @@ import type { CanvasSection } from '@lean-canvas/shared'
 interface LeanCanvasSectionPanelProps {
   section: CanvasSection
   style?: React.CSSProperties
-  /** Called when the panel gains focus — lets parent update active section in Redux. */
+  /** Called when the tile is clicked — lets parent update active section in Redux. */
   onFocus?: () => void
 }
 
@@ -27,7 +27,6 @@ const SECTION_LABELS: Record<CanvasSection, string> = {
 
 const API_BASE = import.meta.env.VITE_LEAN_CANVAS_API_URL ?? 'http://localhost:3026'
 
-// Blue Ocean starter prompts — shown as initial assistant message in each section.
 const BLUE_OCEAN_PROMPTS: Record<CanvasSection, string> = {
   PROBLEM:           'What top 1–3 problems do customers face today that existing solutions fail to solve? Consider both direct pain points and "nonconsumers" who avoid the market entirely.',
   SOLUTION:          'What is the simplest possible solution to each problem above? Focus on eliminating or reducing factors that make the current market unattractive.',
@@ -47,6 +46,7 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
   ])
   const [loading, setLoading] = useState(false)
   const [threadId] = useState(() => `${section}-${Date.now()}`)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const submit = async () => {
     if (!input.trim()) return
@@ -70,6 +70,12 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
     }
   }
 
+  const handleTileClick = () => {
+    onFocus?.()
+    // Focus the text input — clicking anywhere on the card lands you in the input
+    inputRef.current?.focus()
+  }
+
   return (
     <Tile
       style={{
@@ -79,8 +85,9 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
         background: 'var(--cds-layer)',
         padding: '0.625rem',
         overflow: 'hidden',
+        cursor: 'text',
       }}
-      onClick={onFocus}
+      onClick={handleTileClick}
     >
       <h4 style={{
         color: 'var(--cds-text-secondary)',
@@ -107,42 +114,33 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
         {loading && <p style={{ color: 'var(--cds-text-placeholder)', fontSize: '0.75rem' }}>Thinking…</p>}
       </div>
 
-      {/* Input row — icon-only send button, square, compact */}
-      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', flexShrink: 0 }}>
+      {/* Input row — stopPropagation so input interactions don't re-trigger tile click */}
+      <div
+        style={{ display: 'flex', gap: '0.25rem', alignItems: 'center', flexShrink: 0 }}
+        onClick={e => e.stopPropagation()}
+      >
         <TextInput
+          ref={inputRef}
           id={`input-${section}`}
           labelText=""
           hideLabel
           size="sm"
-          placeholder={`Ask…`}
+          placeholder="Ask…"
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && submit()}
-          onClick={e => e.stopPropagation()}
         />
-        <button
-          onClick={e => { e.stopPropagation(); submit() }}
+        {/* Carbon IconButton preserves brand primary color in all states */}
+        <IconButton
+          label="Send"
+          onClick={submit}
           disabled={loading || !input.trim()}
-          title="Send"
-          style={{
-            flexShrink: 0,
-            width: '2rem',
-            height: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: loading || !input.trim()
-              ? 'var(--cds-button-disabled)'
-              : 'var(--cds-button-primary)',
-            border: 'none',
-            borderRadius: '2px',
-            cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
-            color: 'var(--cds-text-on-color)',
-            transition: 'background 0.15s',
-          }}
+          size="sm"
+          kind="primary"
+          className="canvas-section-send-btn"
         >
           <SendAlt size={16} />
-        </button>
+        </IconButton>
       </div>
     </Tile>
   )
