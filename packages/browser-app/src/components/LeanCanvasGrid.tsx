@@ -5,8 +5,6 @@ import type { CanvasSection } from '@lean-canvas/shared'
 
 interface LeanCanvasGridProps {
   shellMode?: boolean
-  /** Called when a section tile is clicked — lets parent open Chat tab in the side panel. */
-  onSectionFocus?: () => void
 }
 
 // Grid layout — 6 equal columns so cost and revenue are exactly 50/50:
@@ -37,7 +35,7 @@ const CANVAS_LAYOUT: Array<{ section: CanvasSection; gridArea: string }> = [
 
 // ADR-0020: Redux access via hooks; props-out to child panels.
 // Provider lives in CanvasDashboard (MF boundary). Grid is a pure layout component.
-export default function LeanCanvasGrid({ shellMode = false, onSectionFocus }: LeanCanvasGridProps) {
+export default function LeanCanvasGrid({ shellMode = false }: LeanCanvasGridProps) {
   const dispatch = useAppDispatch()
 
   return (
@@ -66,10 +64,7 @@ export default function LeanCanvasGrid({ shellMode = false, onSectionFocus }: Le
           key={section}
           section={section}
           style={{ gridArea }}
-          onFocus={() => {
-            dispatch(setActiveSection(section))
-            onSectionFocus?.()
-          }}
+          onFocus={() => dispatch(setActiveSection(section))}
         />
       ))}
     </div>

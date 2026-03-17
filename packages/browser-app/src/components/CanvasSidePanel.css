@@ -1,39 +1,31 @@
 /* ── Side panel shell ────────────────────────────────────────── */
 
+/* Mirrors cv-builder ThreadSidebar exactly:
+ * right:1rem gap from viewport edge, slides out by calc(100% + 1rem).
+ * Dashboard wrapper uses margin-right: calc(320px + 2rem) to clear it. */
 .canvas-side-panel {
-  position: fixed;
-  right: 0;
-  top: 48px; /* below shell header */
-  height: calc(100vh - 48px);
-  width: 320px;
+  position: fixed !important;
+  right: 1rem !important;
+  top: calc(48px + 0.5rem) !important;
+  height: calc(100vh - 48px - 1rem) !important;
+  width: 320px !important;
   display: flex;
   flex-direction: column;
-  background: var(--cds-layer-01);
-  border-left: 1px solid var(--cds-border-subtle);
-  z-index: 999;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--cds-layer-01) !important;
+  border-left: 1px solid var(--cds-border-subtle) !important;
+  border-radius: 0 !important;
+  z-index: 999 !important;
+  transform: translateX(calc(100% + 1rem));
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0s 0.3s !important;
   box-shadow: none;
 }
 
 .canvas-side-panel.expanded {
-  transform: translateX(0);
-  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Scrim — only shows on mobile; desktop panel pushes content via margin */
-.canvas-panel-scrim {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .canvas-panel-scrim {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 998;
-  }
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  transition: transform 0.3s ease, visibility 0s !important;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* ── Tab bar ─────────────────────────────────────────────────── */
@@ -318,4 +310,15 @@
 .canvas-chat-send-row {
   display: flex;
   justify-content: flex-end;
+}
+
+/* ── Section panel send button ───────────────────────────────── */
+/* Applied via className on LeanCanvasSectionPanel's IconButton.
+ * Carbon's sm IconButton is 32px — just ensure it stays square. */
+.canvas-section-send-btn.cds--btn--icon-only {
+  min-width: 2rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  padding: 0 !important;
+  flex-shrink: 0;
 }

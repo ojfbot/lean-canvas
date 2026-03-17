@@ -2,6 +2,7 @@ import { Provider } from 'react-redux'
 import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
+
 import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
 import LeanCanvasGrid from './LeanCanvasGrid'
@@ -17,12 +18,6 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
   const dispatch = useAppDispatch()
   const sidebarExpanded = useAppSelector(s => s.threads.sidebarExpanded)
   const activePanelTab = useAppSelector(s => s.threads.activePanelTab)
-
-  const handleSectionFocus = () => {
-    // Open panel and switch to Chat tab when user clicks a section
-    dispatch(setSidebarExpanded(true))
-    dispatch(setPanelTab('chat'))
-  }
 
   return (
     <>
@@ -63,10 +58,7 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
         </div>
 
         <div className="canvas-grid-scroller">
-          <LeanCanvasGrid
-            shellMode={shellMode}
-            onSectionFocus={handleSectionFocus}
-          />
+          <LeanCanvasGrid shellMode={shellMode} />
         </div>
       </div>
     </>

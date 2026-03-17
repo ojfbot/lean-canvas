@@ -252,11 +252,6 @@ function ChatPanel() {
 export default function CanvasSidePanel({ isExpanded, onToggle, activeTab, onTabChange }: CanvasSidePanelProps) {
   return (
     <div {...(!isExpanded ? { inert: '' } : {})}>
-      {/* Scrim — clicking outside closes panel */}
-      {isExpanded && (
-        <div className="canvas-panel-scrim" onClick={onToggle} aria-hidden />
-      )}
-
       <div
         className={`canvas-side-panel${isExpanded ? ' expanded' : ''}`}
         data-element="canvas-side-panel"

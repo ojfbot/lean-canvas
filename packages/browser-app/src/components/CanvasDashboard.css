@@ -11,10 +11,11 @@
   transition: margin-right 0.3s ease;
 }
 
-/* When side panel is open: shrink right margin so grid doesn't hide under the panel.
- * Panel is 320px wide, positioned at right:0 — margin-right matches exactly. */
+/* When panel is open: match cv-builder exactly.
+ * Panel is right:1rem + 320px wide → its left edge is at (1rem + 320px) from right.
+ * margin-right: calc(320px + 2rem) leaves 1rem breathing room between content and panel. */
 .canvas-dashboard-wrapper.with-sidebar {
-  margin-right: 320px;
+  margin-right: calc(320px + 2rem);
 }
 
 /* Shell-mode: top gap = horizontal margin. Matches cv-builder .shell-mode */
