@@ -49,7 +49,8 @@ export default function LeanCanvasGrid({ shellMode = false }: LeanCanvasGridProp
         gridTemplateRows: '1fr 1fr auto',
         gap: '1px',
         background: 'var(--cds-border-subtle)',
-        minHeight: shellMode ? '100%' : '80vh',
+        minHeight: shellMode ? 0 : '80vh',
+        height: shellMode ? '100%' : undefined,
       }}
     >
       {CANVAS_LAYOUT.map(({ section, gridArea }) => (
