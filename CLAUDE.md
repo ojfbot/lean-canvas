@@ -6,7 +6,7 @@
 
 ```bash
 pnpm install
-pnpm dev:all          # API on :3021, frontend on :3020
+pnpm dev:all          # API on :3026, frontend on :3025
 pnpm build
 pnpm test
 pnpm lint
@@ -18,8 +18,8 @@ Frame OS sub-app. Module Federation remote exposed to the shell at `lean_canvas/
 
 - `packages/shared/` — `CanvasSection` types, `Message`, `CanvasThread`
 - `packages/agent-graph/` — LangGraph canvas section nodes; 9 domain system prompts; routes through `frame-agent` at `:4001`
-- `packages/api/` — Express on `:3021`; `GET /api/tools` (ADR-0007); `POST /api/canvas/:section/chat`
-- `packages/browser-app/` — Vite + Carbon DS on `:3020`; MF remote: exposes `Dashboard` + `Settings`
+- `packages/api/` — Express on `:3026`; `GET /api/tools` (ADR-0007); `POST /api/canvas/:section/chat`
+- `packages/browser-app/` — Vite + Carbon DS on `:3025`; MF remote: exposes `Dashboard` + `Settings`
 
 ## Key constraints
 
@@ -27,4 +27,4 @@ Frame OS sub-app. Module Federation remote exposed to the shell at `lean_canvas/
 - **ADR-0020**: no Redux imports inside `packages/browser-app/src/components/` — props-in/callbacks-out
 - **ADR-0019**: each canvas section agent operates with its own isolated context window
 - **ADR-0007**: `GET /api/tools` must remain unauthenticated and return per-tool endpoints
-- Ports: `3020` (frontend), `3021` (API) — do not conflict with other Frame apps
+- Ports: `3025` (frontend), `3026` (API) — do not conflict with other Frame apps

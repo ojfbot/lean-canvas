@@ -6,9 +6,9 @@ import { getLogger } from './utils/logger.js'
 
 const log = getLogger('server')
 const app = express()
-const PORT = parseInt(process.env.PORT ?? '3021', 10)
+const PORT = parseInt(process.env.PORT ?? '3026', 10)
 
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:3020' }))
+app.use(cors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:3025' }))
 app.use(express.json())
 
 // Health check

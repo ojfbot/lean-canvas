@@ -25,8 +25,8 @@ export default defineConfig({
       },
     }),
   ],
-  server: { port: 3020 },
-  preview: { port: 3020 },
+  server: { port: 3025 },
+  preview: { port: 3025 },
   build: {
     target: 'esnext',
     minify: false,
