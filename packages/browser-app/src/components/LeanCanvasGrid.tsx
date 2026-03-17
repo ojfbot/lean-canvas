@@ -9,16 +9,19 @@ interface LeanCanvasGridProps {
   onSectionFocus?: () => void
 }
 
-// Grid layout mirrors the standard Lean Canvas structure:
+// Grid layout — 6 equal columns so cost and revenue are exactly 50/50:
 //
-//  ┌──────────┬──────────┬──────────────────┬──────────┬──────────────────┐
-//  │ PROBLEM  │ SOLUTION │ VALUE PROPOSITION│ UNFAIR   │ CUSTOMER         │
-//  │          │          │                  │ ADVANTAGE│ SEGMENTS         │
-//  ├──────────┴──────────┤                  ├──────────┴──────────────────┤
-//  │ KEY METRICS         │                  │ CHANNELS                    │
-//  ├─────────────────────┴──────────────────┴─────────────────────────────┤
-//  │ COST STRUCTURE                 │ REVENUE STREAMS                     │
-//  └────────────────────────────────┴─────────────────────────────────────┘
+//  col:  1        2        3         4         5        6
+//  ┌─────────┬────────┬──────────────────────┬─────────┬──────────────┐
+//  │ PROBLEM │SOLUTION│   VALUE PROPOSITION  │ UNFAIR  │  CUSTOMER    │  row 1
+//  │         │        │                      │ADVANTAGE│  SEGMENTS    │
+//  ├─────────┴────────┤                      ├─────────┴──────────────┤
+//  │   KEY METRICS    │                      │      CHANNELS          │  row 2
+//  ├──────────────────┴──────────────────────┼────────────────────────┤
+//  │        COST STRUCTURE (50%)             │  REVENUE STREAMS (50%) │  row 3
+//  └─────────────────────────────────────────┴────────────────────────┘
+//
+// cost = cols 1-3, revenue = cols 4-6 → exactly equal width.
 
 const CANVAS_LAYOUT: Array<{ section: CanvasSection; gridArea: string }> = [
   { section: 'PROBLEM',           gridArea: 'problem' },
@@ -42,16 +45,20 @@ export default function LeanCanvasGrid({ shellMode = false, onSectionFocus }: Le
       className={`lean-canvas-grid${shellMode ? ' shell-mode' : ''}`}
       style={{
         display: 'grid',
+        // 6 equal columns — cost (cols 1-3) and revenue (cols 4-6) are exactly 50% each
+        gridTemplateColumns: 'repeat(6, 1fr)',
         gridTemplateAreas: `
-          "problem solution value advantage segments"
-          "metrics metrics value channels channels"
-          "cost    cost    cost  revenue  revenue"
+          "problem  solution  value    value    advantage segments"
+          "metrics  metrics   value    value    channels  channels"
+          "cost     cost      cost     revenue  revenue   revenue"
         `,
-        gridTemplateColumns: '1fr 1fr 1.5fr 1fr 1.5fr',
-        gridTemplateRows: '1fr 1fr auto',
+        // 3 equal rows — fills container height without overflow
+        gridTemplateRows: '1fr 1fr 1fr',
         gap: '1px',
         background: 'var(--cds-border-subtle)',
-        minHeight: '80vh',
+        // Fill the scroller height exactly — no minHeight that would force overflow
+        height: '100%',
+        minHeight: shellMode ? 0 : '600px',
       }}
     >
       {CANVAS_LAYOUT.map(({ section, gridArea }) => (
