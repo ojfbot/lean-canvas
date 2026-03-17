@@ -1,18 +1,18 @@
 .canvas-condensed-chat {
-  position: sticky;
-  bottom: 0;
+  /* Flex child at the bottom of canvas-dashboard-main — never shrinks below its min. */
+  flex-shrink: 0;
   z-index: 100;
   background: var(--cds-layer-01);
   border-top: 1px solid var(--cds-border-subtle);
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   transition: max-height 0.2s ease;
-  max-height: 3.5rem; /* collapsed: header + input */
+  max-height: 3.5rem; /* collapsed: header only */
+  overflow: hidden;
 }
 
 .canvas-condensed-chat.expanded {
-  max-height: 50vh;
+  max-height: 40vh;
 }
 
 .canvas-condensed-header {
