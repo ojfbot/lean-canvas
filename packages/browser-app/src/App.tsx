@@ -1,16 +1,12 @@
 import React from 'react'
-import { Provider } from 'react-redux'
-import { store } from './store/store'
-import LeanCanvasGrid from './components/LeanCanvasGrid'
+import CanvasDashboard from './components/CanvasDashboard'
 
-// Standalone dev wrapper — adds mock shell chrome for local development.
-// When loaded as a Module Federation remote, the shell renders Dashboard directly.
+// Standalone dev wrapper — CanvasDashboard carries its own Provider.
+// When loaded as a Module Federation remote, the shell renders CanvasDashboard directly.
 export default function App() {
   return (
-    <Provider store={store}>
-      <div style={{ padding: '1rem', background: '#161616', minHeight: '100vh' }}>
-        <LeanCanvasGrid shellMode={false} />
-      </div>
-    </Provider>
+    <div style={{ background: '#161616', minHeight: '100vh' }}>
+      <CanvasDashboard shellMode={false} />
+    </div>
   )
 }

@@ -15,12 +15,14 @@ export default defineConfig({
       name: 'lean_canvas',
       filename: 'remoteEntry.js',
       exposes: {
-        './Dashboard': './src/components/LeanCanvasGrid',
+        './Dashboard': './src/components/CanvasDashboard',
         './Settings': './src/pages/Settings',
       },
       shared: {
         react: { singleton: true, requiredVersion: '^18.3.0' },
         'react-dom': { singleton: true, requiredVersion: '^18.3.0' },
+        '@reduxjs/toolkit': { singleton: true, requiredVersion: '^2.0.0' },
+        'react-redux': { singleton: true, requiredVersion: '^9.0.0' },
         '@carbon/react': { singleton: true, requiredVersion: '^1.71.0' },
       },
     }),
