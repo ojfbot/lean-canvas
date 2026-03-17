@@ -11,9 +11,10 @@
   transition: margin-right 0.3s ease;
 }
 
-/* When thread sidebar is open: push right margin past the 320px sidebar + gap */
+/* When side panel is open: shrink right margin so grid doesn't hide under the panel.
+ * Panel is 320px wide, positioned at right:0 — margin-right matches exactly. */
 .canvas-dashboard-wrapper.with-sidebar {
-  margin-right: calc(320px + 2rem);
+  margin-right: 320px;
 }
 
 /* Shell-mode: top gap = horizontal margin. Matches cv-builder .shell-mode */
