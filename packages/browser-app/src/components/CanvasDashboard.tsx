@@ -2,7 +2,7 @@ import { Provider } from 'react-redux'
 import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { setSidebarExpanded } from '../store/threadsSlice'
-import { Tooltip } from '@carbon/react'
+import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
 import LeanCanvasGrid from './LeanCanvasGrid'
 import CanvasCondensedChat from './CanvasCondensedChat'
@@ -17,42 +17,34 @@ interface CanvasDashboardProps {
 function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
   const dispatch = useAppDispatch()
   const sidebarExpanded = useAppSelector(s => s.threads.sidebarExpanded)
-  const activeThreadId = useAppSelector(s => s.threads.activeThreadId)
-  const threads = useAppSelector(s => s.threads.threads)
-  const activeThread = threads.find(t => t.id === activeThreadId)
 
   return (
-    <div
-      className={[
-        'canvas-dashboard',
-        sidebarExpanded ? 'with-sidebar' : '',
-        shellMode ? 'shell-mode' : '',
-      ].filter(Boolean).join(' ')}
-      data-element="canvas-dashboard"
-    >
-      {/* Thread sidebar */}
-      {sidebarExpanded && <CanvasThreadSidebar />}
+    <>
+      {/* Thread sidebar — position:fixed, slides in from right (mirrors cv-builder ThreadSidebar) */}
+      <CanvasThreadSidebar
+        isExpanded={sidebarExpanded}
+        onToggle={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
+      />
 
-      {/* Main area */}
-      <div className="canvas-dashboard-main">
-        {/* Header */}
+      {/* Main panel with margins matching dashboard-wrapper pattern */}
+      <div
+        className={[
+          'canvas-dashboard-wrapper',
+          sidebarExpanded ? 'with-sidebar' : '',
+          shellMode ? 'shell-mode' : '',
+        ].filter(Boolean).join(' ')}
+        data-element="canvas-dashboard"
+      >
         <div className="canvas-dashboard-header">
-          <div className="canvas-dashboard-title-row">
-            {!shellMode && (
-              <h2 className="canvas-dashboard-title">Lean Canvas</h2>
-            )}
-            <span className="canvas-dashboard-session-name">
-              {activeThread?.name ?? 'My Canvas'}
-            </span>
-          </div>
+          <Heading className="page-header">Lean Canvas</Heading>
 
-          <div className="canvas-dashboard-header-actions">
+          <div className="canvas-header-actions">
             <Tooltip
               align="bottom-right"
               label={sidebarExpanded ? 'Close sessions' : 'Switch session'}
             >
               <button
-                className="canvas-sidebar-toggle"
+                className="sidebar-toggle-btn"
                 onClick={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
                 aria-label="Toggle session sidebar"
               >
@@ -62,20 +54,20 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
           </div>
         </div>
 
-        {/* 9-section canvas grid */}
-        <div className="canvas-dashboard-grid-wrapper">
+        {/* 9-section canvas grid — fills the remaining wrapper space */}
+        <div className="canvas-grid-scroller">
           <LeanCanvasGrid shellMode={shellMode} />
         </div>
-
-        {/* Condensed chat — sticky to bottom of main area */}
-        <CanvasCondensedChat />
       </div>
-    </div>
+
+      {/* Condensed chat — position:fixed bottom-right (mirrors cv-builder CondensedChat) */}
+      <CanvasCondensedChat sidebarExpanded={sidebarExpanded} />
+    </>
   )
 }
 
-// Self-contained export for Module Federation. Carries its own store; shell Provider is outer.
-// Double-wrap is intentional and harmless (inner wins). See app-templates.md invariant.
+// Self-contained export for Module Federation. Carries its own store.
+// Double-wrap is intentional and harmless — inner wins. See app-templates.md invariant.
 export default function CanvasDashboard(props: CanvasDashboardProps) {
   return (
     <Provider store={store}>

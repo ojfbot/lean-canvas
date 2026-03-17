@@ -26,8 +26,12 @@ const SECTION_LABELS: Record<CanvasSection, string> = {
   UNFAIR_ADVANTAGE: 'Unfair Advantage',
 }
 
+interface CanvasCondensedChatProps {
+  sidebarExpanded?: boolean
+}
+
 // ADR-0020: NO Redux imports in this file — all state wiring done via hooks from store.
-export default function CanvasCondensedChat() {
+export default function CanvasCondensedChat({ sidebarExpanded = false }: CanvasCondensedChatProps) {
   const dispatch = useAppDispatch()
   const messages = useAppSelector(s => s.chat.messages)
   const draftInput = useAppSelector(s => s.chat.draftInput)
@@ -106,7 +110,11 @@ export default function CanvasCondensedChat() {
 
   return (
     <div
-      className={`canvas-condensed-chat${isExpanded ? ' expanded' : ''}`}
+      className={[
+        'canvas-condensed-chat',
+        isExpanded ? 'expanded' : '',
+        sidebarExpanded ? 'with-sidebar' : '',
+      ].filter(Boolean).join(' ')}
       data-element="canvas-chat-window"
     >
       {/* Header / collapsed bar */}
