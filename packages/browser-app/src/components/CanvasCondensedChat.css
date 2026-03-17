@@ -1,0 +1,134 @@
+.canvas-condensed-chat {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background: var(--cds-layer-01);
+  border-top: 1px solid var(--cds-border-subtle);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: max-height 0.2s ease;
+  max-height: 3.5rem; /* collapsed: header + input */
+}
+
+.canvas-condensed-chat.expanded {
+  max-height: 50vh;
+}
+
+.canvas-condensed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  min-height: 2.5rem;
+  border-bottom: 1px solid var(--cds-border-subtle-00);
+}
+
+.canvas-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cds-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.canvas-header-title {
+  color: var(--cds-text-primary);
+}
+
+.canvas-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.canvas-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+.canvas-chat-empty {
+  color: var(--cds-text-secondary);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.canvas-message-tile {
+  padding: 0.75rem !important;
+  border-radius: 4px;
+}
+
+.canvas-message-tile.user {
+  background-color: var(--cds-layer-02) !important;
+  border-left: 3px solid var(--cds-interactive-01);
+}
+
+.canvas-message-tile.assistant {
+  background-color: var(--cds-layer-01) !important;
+  border-left: 3px solid var(--cds-support-04);
+}
+
+.canvas-message-tile.streaming {
+  animation: canvasPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes canvasPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.canvas-message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--cds-text-secondary);
+  border-bottom: 1px solid var(--cds-border-subtle-00);
+  padding-bottom: 0.3rem;
+}
+
+.canvas-streaming-indicator {
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+.canvas-message-content {
+  font-size: 0.875rem;
+  color: var(--cds-text-primary);
+  line-height: 1.5;
+}
+
+.canvas-condensed-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.canvas-textarea-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.canvas-chat-textarea {
+  resize: none;
+}
+
+.canvas-input-actions {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.25rem;
+}
+
+.canvas-send-button {
+  min-height: 2rem !important;
+  min-width: 2rem !important;
+}

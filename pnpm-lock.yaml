@@ -91,6 +91,9 @@ importers:
 
   packages/browser-app:
     dependencies:
+      '@carbon/icons-react':
+        specifier: ^11.0.0
+        version: 11.76.0(react@18.3.1)
       '@carbon/react':
         specifier: ^1.71.0
         version: 1.103.0(react-dom@18.3.1)(react-is@19.2.4)(react@18.3.1)(sass@1.98.0)

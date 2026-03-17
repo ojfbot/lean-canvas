@@ -8,6 +8,8 @@ import type { CanvasSection } from '@lean-canvas/shared'
 interface LeanCanvasSectionPanelProps {
   section: CanvasSection
   style?: React.CSSProperties
+  /** Called when the panel gains focus — lets parent update active section in Redux. */
+  onFocus?: () => void
 }
 
 const SECTION_LABELS: Record<CanvasSection, string> = {
@@ -38,7 +40,7 @@ const BLUE_OCEAN_PROMPTS: Record<CanvasSection, string> = {
   UNFAIR_ADVANTAGE:  'What cannot be easily copied or bought? Network effects, proprietary data, brand, regulatory advantage, or a unique team composition.',
 }
 
-export default function LeanCanvasSectionPanel({ section, style }: LeanCanvasSectionPanelProps) {
+export default function LeanCanvasSectionPanel({ section, style, onFocus }: LeanCanvasSectionPanelProps) {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>(() => [
     { role: 'assistant', content: BLUE_OCEAN_PROMPTS[section] },
@@ -82,6 +84,7 @@ export default function LeanCanvasSectionPanel({ section, style }: LeanCanvasSec
         padding: '1rem',
         overflow: 'hidden',
       }}
+      onClick={onFocus}
     >
       <h4 style={{ color: 'var(--cds-text-secondary)', fontSize: '0.75rem', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
         {SECTION_LABELS[section]}

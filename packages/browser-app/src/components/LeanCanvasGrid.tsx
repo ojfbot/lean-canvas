@@ -1,6 +1,5 @@
-import React from 'react'
-import { Provider } from 'react-redux'
-import { store } from '../store/store'
+import { useAppDispatch } from '../store/store'
+import { setActiveSection } from '../store/canvasSlice'
 import LeanCanvasSectionPanel from './LeanCanvasSectionPanel'
 import type { CanvasSection } from '@lean-canvas/shared'
 
@@ -31,8 +30,11 @@ const CANVAS_LAYOUT: Array<{ section: CanvasSection; gridArea: string }> = [
   { section: 'REVENUE_STREAMS',   gridArea: 'revenue' },
 ]
 
-// ADR-0020: Dashboard wraps in Provider so it works as MF remote (shell has no canvas slice)
-function LeanCanvasGridInner({ shellMode = false }: LeanCanvasGridProps) {
+// ADR-0020: Redux access via hooks; props-out to child panels.
+// Provider lives in CanvasDashboard (MF boundary). Grid is a pure layout component.
+export default function LeanCanvasGrid({ shellMode = false }: LeanCanvasGridProps) {
+  const dispatch = useAppDispatch()
+
   return (
     <div
       className={`lean-canvas-grid${shellMode ? ' shell-mode' : ''}`}
@@ -55,18 +57,9 @@ function LeanCanvasGridInner({ shellMode = false }: LeanCanvasGridProps) {
           key={section}
           section={section}
           style={{ gridArea }}
+          onFocus={() => dispatch(setActiveSection(section))}
         />
       ))}
     </div>
-  )
-}
-
-// Double-Provider pattern (see app-templates.md invariant):
-// Inner Provider wins when mounted standalone; shell's Provider is ignored safely.
-export default function LeanCanvasGrid(props: LeanCanvasGridProps) {
-  return (
-    <Provider store={store}>
-      <LeanCanvasGridInner {...props} />
-    </Provider>
   )
 }
