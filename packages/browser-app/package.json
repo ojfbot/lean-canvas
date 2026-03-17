@@ -1,0 +1,27 @@
+{
+  "name": "@lean-canvas/browser-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 3020"
+  },
+  "dependencies": {
+    "@lean-canvas/shared": "workspace:*",
+    "@carbon/react": "^1.71.0",
+    "@reduxjs/toolkit": "^2.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-redux": "^9.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "@originjs/vite-plugin-federation": "^1.3.0",
+    "vite-plugin-css-injected-by-js": "^3.5.0",
+    "vite": "^5.4.0",
+    "typescript": "^5.7.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0"
+  }
+}
