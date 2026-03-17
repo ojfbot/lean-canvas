@@ -1,32 +1,40 @@
 import { Provider } from 'react-redux'
 import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
-import { setSidebarExpanded } from '../store/threadsSlice'
+import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
 import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
 import LeanCanvasGrid from './LeanCanvasGrid'
-import CanvasCondensedChat from './CanvasCondensedChat'
-import CanvasThreadSidebar from './CanvasThreadSidebar'
+import CanvasSidePanel from './CanvasSidePanel'
 import './CanvasDashboard.css'
+import './CanvasSidePanel.css'
 
 interface CanvasDashboardProps {
-  /** True when mounted inside the Frame shell. Suppresses standalone chrome. */
   shellMode?: boolean
 }
 
 function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
   const dispatch = useAppDispatch()
   const sidebarExpanded = useAppSelector(s => s.threads.sidebarExpanded)
+  const activePanelTab = useAppSelector(s => s.threads.activePanelTab)
+
+  const handleSectionFocus = () => {
+    // Open panel and switch to Chat tab when user clicks a section
+    dispatch(setSidebarExpanded(true))
+    dispatch(setPanelTab('chat'))
+  }
 
   return (
     <>
-      {/* Thread sidebar — position:fixed, slides in from right (mirrors cv-builder ThreadSidebar) */}
-      <CanvasThreadSidebar
+      {/* Right-rail side panel — Sessions + Chat tabs, no overlap with grid */}
+      <CanvasSidePanel
         isExpanded={sidebarExpanded}
         onToggle={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
+        activeTab={activePanelTab}
+        onTabChange={tab => dispatch(setPanelTab(tab))}
       />
 
-      {/* Main panel with margins matching dashboard-wrapper pattern */}
+      {/* Main dashboard panel — right margin clears the side panel when open */}
       <div
         className={[
           'canvas-dashboard-wrapper',
@@ -41,12 +49,12 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
           <div className="canvas-header-actions">
             <Tooltip
               align="bottom-right"
-              label={sidebarExpanded ? 'Close sessions' : 'Switch session'}
+              label={sidebarExpanded ? 'Close panel' : 'Sessions & Chat'}
             >
               <button
                 className="sidebar-toggle-btn"
                 onClick={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
-                aria-label="Toggle session sidebar"
+                aria-label="Toggle sessions / chat panel"
               >
                 {sidebarExpanded ? <Close size={20} /> : <Menu size={20} />}
               </button>
@@ -54,20 +62,17 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
           </div>
         </div>
 
-        {/* 9-section canvas grid — fills the remaining wrapper space */}
         <div className="canvas-grid-scroller">
-          <LeanCanvasGrid shellMode={shellMode} />
+          <LeanCanvasGrid
+            shellMode={shellMode}
+            onSectionFocus={handleSectionFocus}
+          />
         </div>
       </div>
-
-      {/* Condensed chat — position:fixed bottom-right (mirrors cv-builder CondensedChat) */}
-      <CanvasCondensedChat sidebarExpanded={sidebarExpanded} />
     </>
   )
 }
 
-// Self-contained export for Module Federation. Carries its own store.
-// Double-wrap is intentional and harmless — inner wins. See app-templates.md invariant.
 export default function CanvasDashboard(props: CanvasDashboardProps) {
   return (
     <Provider store={store}>
