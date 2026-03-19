@@ -2,6 +2,10 @@
 
 > **Before making any architectural decisions, read `domain-knowledge/frame-os-context.md`.**
 
+## Skills
+
+Project commands and skills live in `.claude/skills/`.
+
 ## Commands
 
 ```bash
