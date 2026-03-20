@@ -11,4 +11,7 @@ jobs:
           node-version: '22'
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - name: Build shared package
+        run: pnpm --filter @lean-canvas/shared build
+      - name: Build browser-app
+        run: pnpm --filter @lean-canvas/browser-app build
