@@ -53,6 +53,11 @@ jobs:
             echo "prod=" >> $GITHUB_OUTPUT
           fi
 
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build shared package (required by browser-app)
+        run: pnpm --filter @lean-canvas/shared build
+
       - name: Pull Vercel project settings
         run: vercel pull --yes --environment=${{ steps.flags.outputs.vercel_env }} --token=${{ secrets.VERCEL_TOKEN }}
 
