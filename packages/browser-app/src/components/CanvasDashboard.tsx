@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/store'
 import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
 
 import { DashboardLayout } from '@ojfbot/frame-ui-components'
+import '@ojfbot/frame-ui-components/styles/dashboard-layout'
 import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
 import LeanCanvasGrid from './LeanCanvasGrid'
