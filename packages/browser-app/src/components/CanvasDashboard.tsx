@@ -3,6 +3,7 @@ import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
 
+import { DashboardLayout } from '@ojfbot/frame-ui-components'
 import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
 import LeanCanvasGrid from './LeanCanvasGrid'
@@ -30,15 +31,8 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
       />
 
       {/* Main dashboard panel — right margin clears the side panel when open */}
-      <div
-        className={[
-          'canvas-dashboard-wrapper',
-          sidebarExpanded ? 'with-sidebar' : '',
-          shellMode ? 'shell-mode' : '',
-        ].filter(Boolean).join(' ')}
-        data-element="canvas-dashboard"
-      >
-        <div className="canvas-dashboard-header">
+      <DashboardLayout shellMode={shellMode} sidebarExpanded={sidebarExpanded}>
+        <DashboardLayout.Header>
           <Heading className="page-header">Lean Canvas</Heading>
 
           <div className="canvas-header-actions">
@@ -55,12 +49,12 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
               </button>
             </Tooltip>
           </div>
-        </div>
+        </DashboardLayout.Header>
 
         <div className="canvas-grid-scroller">
           <LeanCanvasGrid shellMode={shellMode} />
         </div>
-      </div>
+      </DashboardLayout>
     </>
   )
 }
