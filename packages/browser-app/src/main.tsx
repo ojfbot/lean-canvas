@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import '@carbon/styles/css/styles.css'
+import '@carbon/react/css/styles.css'
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 import App from './App'
