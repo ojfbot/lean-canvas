@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@lean-canvas/shared": "workspace:*",
+    "@ojfbot/frame-ui-components": "file:../../../frame-ui-components",
     "@carbon/icons-react": "^11.0.0",
     "@carbon/react": "^1.71.0",
     "@reduxjs/toolkit": "^2.0.0",
