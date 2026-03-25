@@ -3,7 +3,7 @@ import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
 import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
 
-import { DashboardLayout } from '@ojfbot/frame-ui-components'
+import { DashboardLayout, ErrorBoundary } from '@ojfbot/frame-ui-components'
 import '@ojfbot/frame-ui-components/styles/dashboard-layout'
 import { Heading, Tooltip } from '@carbon/react'
 import { Menu, Close } from '@carbon/icons-react'
@@ -63,7 +63,9 @@ function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
 export default function CanvasDashboard(props: CanvasDashboardProps) {
   return (
     <Provider store={store}>
-      <CanvasDashboardContent {...props} />
+      <ErrorBoundary appName="lean-canvas" boundaryName="canvas-dashboard">
+        <CanvasDashboardContent {...props} />
+      </ErrorBoundary>
     </Provider>
   )
 }
