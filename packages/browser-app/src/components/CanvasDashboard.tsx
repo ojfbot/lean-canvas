@@ -1,16 +1,15 @@
 import { Provider } from 'react-redux'
 import { store } from '../store/store'
 import { useAppDispatch, useAppSelector } from '../store/store'
-import { setSidebarExpanded, setPanelTab } from '../store/threadsSlice'
+import { setSidebarExpanded } from '../store/threadsSlice'
 
-import { DashboardLayout, ErrorBoundary } from '@ojfbot/frame-ui-components'
+import { DashboardLayout, ErrorBoundary, SidebarToggle } from '@ojfbot/frame-ui-components'
 import '@ojfbot/frame-ui-components/styles/dashboard-layout'
-import { Heading, Tooltip } from '@carbon/react'
-import { Menu, Close } from '@carbon/icons-react'
+import { Heading } from '@carbon/react'
 import LeanCanvasGrid from './LeanCanvasGrid'
-import CanvasSidePanel from './CanvasSidePanel'
+import ThreadSidebarConnected from './ThreadSidebarConnected'
+import CondensedChat from './CondensedChat'
 import './CanvasDashboard.css'
-import './CanvasSidePanel.css'
 
 interface CanvasDashboardProps {
   shellMode?: boolean
@@ -19,43 +18,31 @@ interface CanvasDashboardProps {
 function CanvasDashboardContent({ shellMode }: CanvasDashboardProps) {
   const dispatch = useAppDispatch()
   const sidebarExpanded = useAppSelector(s => s.threads.sidebarExpanded)
-  const activePanelTab = useAppSelector(s => s.threads.activePanelTab)
+  const chatExpanded = useAppSelector(s => s.chat.displayState === 'expanded')
 
   return (
     <>
-      {/* Right-rail side panel — Sessions + Chat tabs, no overlap with grid */}
-      <CanvasSidePanel
+      <ThreadSidebarConnected
         isExpanded={sidebarExpanded}
         onToggle={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
-        activeTab={activePanelTab}
-        onTabChange={tab => dispatch(setPanelTab(tab))}
       />
 
-      {/* Main dashboard panel — right margin clears the side panel when open */}
-      <DashboardLayout shellMode={shellMode} sidebarExpanded={sidebarExpanded}>
+      <DashboardLayout
+        shellMode={shellMode}
+        sidebarExpanded={sidebarExpanded}
+        chatExpanded={chatExpanded}
+      >
         <DashboardLayout.Header>
           <Heading className="page-header">Lean Canvas</Heading>
-
-          <div className="canvas-header-actions">
-            <Tooltip
-              align="bottom-right"
-              label={sidebarExpanded ? 'Close panel' : 'Sessions & Chat'}
-            >
-              <button
-                className="sidebar-toggle-btn"
-                onClick={() => dispatch(setSidebarExpanded(!sidebarExpanded))}
-                aria-label="Toggle sessions / chat panel"
-              >
-                {sidebarExpanded ? <Close size={20} /> : <Menu size={20} />}
-              </button>
-            </Tooltip>
-          </div>
+          <SidebarToggle isExpanded={sidebarExpanded} onToggle={() => dispatch(setSidebarExpanded(!sidebarExpanded))} />
         </DashboardLayout.Header>
 
         <div className="canvas-grid-scroller">
           <LeanCanvasGrid shellMode={shellMode} />
         </div>
       </DashboardLayout>
+
+      <CondensedChat sidebarExpanded={sidebarExpanded} />
     </>
   )
 }
