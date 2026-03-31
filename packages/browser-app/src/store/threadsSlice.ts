@@ -6,13 +6,10 @@ export interface CanvasThreadEntry {
   createdAt: string
 }
 
-export type PanelTab = 'sessions' | 'chat'
-
 interface ThreadsSliceState {
   threads: CanvasThreadEntry[]
   activeThreadId: string
   sidebarExpanded: boolean
-  activePanelTab: PanelTab
 }
 
 function now() { return new Date().toISOString() }
@@ -27,7 +24,6 @@ const initialState: ThreadsSliceState = {
   threads: [defaultThread],
   activeThreadId: 'default',
   sidebarExpanded: false,
-  activePanelTab: 'sessions',
 }
 
 const threadsSlice = createSlice({
@@ -62,13 +58,10 @@ const threadsSlice = createSlice({
     setSidebarExpanded(state, action: PayloadAction<boolean>) {
       state.sidebarExpanded = action.payload
     },
-    setPanelTab(state, action: PayloadAction<PanelTab>) {
-      state.activePanelTab = action.payload
-    },
   },
 })
 
-export const { addThread, switchThread, renameThread, removeThread, setSidebarExpanded, setPanelTab } =
+export const { addThread, switchThread, renameThread, removeThread, setSidebarExpanded } =
   threadsSlice.actions
 
 export default threadsSlice.reducer
