@@ -32,3 +32,10 @@ Frame OS sub-app. Module Federation remote exposed to the shell at `lean_canvas/
 - **ADR-0019**: each canvas section agent operates with its own isolated context window
 - **ADR-0007**: `GET /api/tools` must remain unauthenticated and return per-tool endpoints
 - Ports: `3025` (frontend), `3026` (API) — do not conflict with other Frame apps
+
+## Deployment
+
+**NEVER deploy directly to production** via CLI (`vercel deploy --prod`, `vercel promote`, etc.).
+All production deployments go through the GitHub PR → CI → merge → automated deploy pipeline.
+The only exception is `workflow_dispatch` for manual CI triggers.
+Local Vercel CLI usage is restricted to preview deploys only.
