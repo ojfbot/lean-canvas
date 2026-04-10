@@ -9,6 +9,19 @@
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR/scripts/hooks/log-skill.sh\"",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/scripts/hooks/bead-session.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/scripts/hooks/bead-session.sh\""
           }
         ]
       }
