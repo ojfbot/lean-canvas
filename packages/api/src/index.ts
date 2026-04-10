@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { canvasRouter } from './routes/canvas.js'
 import { toolsRouter } from './routes/tools.js'
+import beadsRouter from './routes/beads.js'
 import { getLogger } from './utils/logger.js'
 
 const log = getLogger('server')
@@ -16,6 +17,9 @@ app.get('/health', (_req, res) => res.json({ status: 'ok', app: 'lean-canvas' })
 
 // Capability manifest (ADR-0007) — unauthenticated
 app.use('/api/tools', toolsRouter)
+
+// Bead projection — ADR-0016 compliant (Mayor aggregation)
+app.use('/api/beads', beadsRouter)
 
 // Canvas section chat routes
 app.use('/api/canvas', canvasRouter)
