@@ -22,7 +22,7 @@ Frame OS sub-app. Module Federation remote exposed to the shell at `lean_canvas/
 
 - `packages/shared/` — `CanvasSection` types, `Message`, `CanvasThread`
 - `packages/agent-graph/` — LangGraph canvas section nodes; 9 domain system prompts; routes through `frame-agent` at `:4001`
-- `packages/api/` — Express on `:3026`; `GET /api/tools` (ADR-0007); `POST /api/canvas/:section/chat`
+- `packages/api/` — Express on `:3026`; `GET /api/tools` (ADR-0007); `GET /api/beads` (ADR-0016); `POST /api/canvas/:section/chat`
 - `packages/browser-app/` — Vite + Carbon DS (g100 dark theme) on `:3025`; MF remote: exposes `Dashboard` + `Settings`; uses `DashboardLayout` from `@ojfbot/frame-ui-components`
 
 ## Key constraints
