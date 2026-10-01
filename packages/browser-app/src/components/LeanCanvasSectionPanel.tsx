@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Tile, TextInput, IconButton } from '@carbon/react'
 import { SendAlt } from '@carbon/icons-react'
 import type { CanvasSection } from '@lean-canvas/shared'
+import { API_BASE } from '../api'
 
 // ADR-0020: NO Redux imports in this file — props-in/callbacks-out only.
 // State wiring belongs in LeanCanvasGrid (the app layer).
@@ -24,8 +25,6 @@ const SECTION_LABELS: Record<CanvasSection, string> = {
   REVENUE_STREAMS:   'Revenue Streams',
   UNFAIR_ADVANTAGE:  'Unfair Advantage',
 }
-
-const API_BASE = import.meta.env.VITE_LEAN_CANVAS_API_URL ?? 'http://localhost:3026'
 
 const BLUE_OCEAN_PROMPTS: Record<CanvasSection, string> = {
   PROBLEM:           'What top 1–3 problems do customers face today that existing solutions fail to solve? Consider both direct pain points and "nonconsumers" who avoid the market entirely.',
@@ -56,6 +55,7 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
     setLoading(true)
 
     try {
+      if (!API_BASE) throw new Error('API not configured')
       const res = await fetch(`${API_BASE}/api/canvas/${section}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -63,8 +63,9 @@ export default function LeanCanvasSectionPanel({ section, style, onFocus }: Lean
       })
       const data = await res.json() as { content: string }
       setMessages(prev => [...prev, { role: 'assistant', content: data.content }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Error: could not reach API.' }])
+    } catch (err) {
+      const reason = err instanceof Error && err.message === 'API not configured' ? 'API not configured.' : 'could not reach API.'
+      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${reason}` }])
     } finally {
       setLoading(false)
     }

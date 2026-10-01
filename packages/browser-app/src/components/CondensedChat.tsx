@@ -20,7 +20,7 @@ import {
 } from '../store/chatSlice'
 import type { CanvasSection } from '@lean-canvas/shared'
 
-const API_BASE = import.meta.env.VITE_LEAN_CANVAS_API_URL ?? 'http://localhost:3026'
+import { API_BASE } from '../api'
 
 const SECTION_LABELS: Record<CanvasSection, string> = {
   PROBLEM: 'Problem', SOLUTION: 'Solution', VALUE_PROPOSITION: 'Value Proposition',
@@ -57,6 +57,7 @@ export default function CondensedChat({ sidebarExpanded }: Props) {
     const history = messages.slice(-10).map(m => ({ role: m.role, content: m.content }))
 
     try {
+      if (!API_BASE) throw new Error('API not configured')
       const res = await fetch(`${API_BASE}/api/canvas/${contextSection}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

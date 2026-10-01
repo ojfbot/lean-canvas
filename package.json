@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
+    "check:no-loopback": "sh scripts/check-no-loopback.sh",
     "dev:all": "pnpm --filter @lean-canvas/api dev & pnpm --filter @lean-canvas/browser-app dev",
     "test": "vitest run",
     "test:watch": "vitest",
