@@ -65,7 +65,7 @@ Part of [Frame OS](https://github.com/ojfbot/shell) — an AI-native application
 | Repo | Description |
 |------|-------------|
 | [shell](https://github.com/ojfbot/shell) | Module Federation host + frame-agent LLM gateway |
-| [core](https://github.com/ojfbot/core) | Workflow framework — 30+ slash commands + TypeScript engine |
+| [core](https://github.com/ojfbot/core) | Workflow framework (fleet-runner) — 30+ slash commands + TypeScript engine |
 | [cv-builder](https://github.com/ojfbot/cv-builder) | AI-powered resume builder with LangGraph agents |
 | [blogengine](https://github.com/ojfbot/BlogEngine) | AI blog content creation platform |
 | [TripPlanner](https://github.com/ojfbot/TripPlanner) | AI trip planner with 11-phase pipeline |
